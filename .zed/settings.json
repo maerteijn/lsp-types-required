@@ -1,0 +1,34 @@
+{
+  "languages": {
+    "Python": {
+      "language_servers": ["ruff", "zuban"],
+      "format_on_save": "off",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    }
+  },
+  "lsp": {
+    "ruff": {
+      "binary": {
+        "path": ".venv/bin/ruff",
+        "arguments": ["server"]
+      }
+    },
+    "zuban": {
+      "binary": {
+        "path": ".venv/bin/zuban",
+        "arguments": ["server"]
+      }
+    }
+  }
+}
