@@ -13,9 +13,10 @@ logging.getLogger("pygls.protocol.json_rpc").setLevel(logging.DEBUG)
 logger: logging.Logger = logging.getLogger(__name__)
 
 current_dir: Path = Path(__file__).parent.absolute()
+project_dir = current_dir.parent.parent.absolute()
 
 
-def initialize(pid: int, current_dir: Path) -> types.InitializeParams:
+def initialize(pid: int, workspace_dir: Path) -> types.InitializeParams:
     """
     See an example here: https://github.com/microsoft/monitors4codegen/blob/main/src/monitors4codegen/multilspy/language_servers/jedi_language_server/initialize_params.json
     """
@@ -35,10 +36,10 @@ def initialize(pid: int, current_dir: Path) -> types.InitializeParams:
         client_info=types.InitializeParamsClientInfoType(
             name="PyGLS client", version="0.0.1"
         ),
-        root_path=str(current_dir),
+        root_path=str(workspace_dir),
         trace=types.TraceValues.Verbose,
         workspace_folders=[
-            types.WorkspaceFolder(uri=f"file://{current_dir}", name="workspace")
+            types.WorkspaceFolder(uri=f"file://{workspace_dir}", name="workspace")
         ],
     )
 
@@ -67,7 +68,7 @@ async def lsp_send_hover(lsp: str):
             await client.start_io(".venv/bin/zuban", "server")
 
     await client.initialize_async(
-        params=initialize(pid=os.getpid(), current_dir=current_dir)
+        params=initialize(pid=os.getpid(), workspace_dir=project_dir)
     )
 
     client.initialized(params=types.InitializedParams())
